@@ -1,6 +1,6 @@
 # Validation
 
-Source package tested in Unity 6000.3.9f1 on Windows, 2026-11-08. 13 preview integration checks and 9 corridor/material/rollback regression checks passed before packaging. Hallvik scene and terrain hashes stayed unchanged during preview tests. Those project-specific fixtures and scene files are not redistributed.
+Source package tested in Unity 6000.3.9f1 on Windows, 2026-11-08. 13 preview integration checks and 9 corridor/material/rollback regression checks passed before packaging. Source scene and terrain hashes stayed unchanged during preview tests. Those project-specific fixtures and scene files are not redistributed.
 
 Measured example: an already-corrected corridor retained only about 0.01147 m planned effect; raising its cap did not increase that effect. A separate 6 m ridge preview changed the silhouette visibly. Neither finding is an aesthetic acceptance score.
 

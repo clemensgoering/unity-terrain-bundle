@@ -20,7 +20,7 @@ Checks: copy paint after persistence; bind Terrain and TerrainCollider; ensure n
 
 Unsupported in this release: multi-segment spline generation, mesh-terrain deformation, rotated/scaled terrain, changing props with terrain, automatic semantic support anchors, runtime road/navmesh generation. Reject or plan a separate explicit operation; do not silently replace the selected method.
 
-Call through the local skill's Invoke-Landscape.ps1 or a thin Pipeline C# entrypoint returning Bridge.RunFile(path). No second server, no TerraLoom dependency, no runtime components.
+Call through the local skill's Invoke-Landscape.ps1 or a thin Pipeline C# entrypoint returning Bridge.RunFile(path). No second server, no external terrain-generator dependency, no runtime components.
 
 inspect optional nameFilter: case-insensitive component-name substring, returns up to 100 renderer and collider component IDs with bounds/material slots or enabled state. Empty filter returns no renderer/collider rows.
 

@@ -1,72 +1,78 @@
 # Unity Terrain Bundle
 
-Wiederverwendbares Unity-Editorpaket mit optionalem Codex-Skill und JSON-Adapter. **Version 0.3.0-preview.1**: Vorschauen und begrenzte Terrainoperationen, kein vollständiger Landschaftsgenerator.
+A reusable Unity Editor package for terrain previews, measured height changes, and bounded terrain edits, with an optional Codex skill and JSON adapter.
 
-## Enthalten
-- UPM-Paket mit Terrainplaner, Vorschaufenster, Höhenänderungskarte und Wirkungsmessung.
-- Korridor- und Materialoperationen mit Szenenbackup, eigener Terrainkopie und Rücknahmebeleg.
-- JSON-Schnittstelle und PowerShell-Adapter für Codex/Unity Pipeline.
-- Neutrale Auftragsvorlagen und ein isolierter Smoke-Test ohne Fremdassets.
+**Version: 0.3.0-preview.1.** Supports local operations rather than full landscape generation.
 
-Keine Hallvik-Welt, Polygon-/Synty-Assets oder TerraLoom-Abhängigkeit enthalten. Der Paketname und C#-Namespace bleiben aus Kompatibilitätsgründen `com.ruinrelay.landscape-kernel` bzw. `RuinRelay.LandscapeKernel`; ein Ruin-Relay-Projekt wird nicht benötigt.
+## Features
 
-## Installation in Unity
-Voraussetzung: Unity 6; geprüft mit **6000.3.9f1 unter Windows**. Andere Editorversionen und Renderpipelines sind nicht umfassend geprüft. Newtonsoft.Json 3.2.2 wird als Paketabhängigkeit aufgelöst.
+- Fixed-camera before/after previews and height-change maps.
+- Height-change measurements, affected-area estimates, and configurable effect thresholds.
+- Corridor and material operations with scene backups and rollback records.
+- A JSON interface, PowerShell adapter, request templates, and portable smoke test.
 
-Im Package Manager **Install package from git URL** verwenden:
+## Installation
+
+Requires Unity 6. Tested with Unity 6000.3.9f1 on Windows. Other versions and render pipelines have not been comprehensively tested. Newtonsoft.Json 3.2.2 is resolved as a package dependency.
+
+In Unity Package Manager, choose **Install package from git URL**:
 
 ```text
 https://github.com/clemensgoering/unity-terrain-bundle.git?path=/Packages/com.ruinrelay.landscape-kernel#v0.3.0-preview.1
 ```
 
-Alternativ Repository herunterladen und **Install package from disk** mit `Packages/com.ruinrelay.landscape-kernel/package.json` auswählen. Git muss für die Git-Installation lokal verfügbar sein.
+Alternatively, download the repository and install from `Packages/com.ruinrelay.landscape-kernel/package.json`. Git must be available for installation by Git URL.
 
-## Ohne Codex benutzen
-1. Bestehende Szene speichern und Play Mode verlassen.
-2. **Tools → Landscape Kernel → Live Preview** öffnen und Terrain zuweisen.
-3. Start/Ende in Welt-X/Z, Breite und Übergang innerhalb des Terrains wählen.
-4. `ridge` für Rücken/Senke oder `corridor` für einen Anschluss wählen. Kamera und Blickziel setzen oder Scene-Kamera übernehmen.
-5. Vorschau berechnen; Vorher, Vorschau und Höhenänderung vergleichen. Optional nach Parameteränderungen automatisch aktualisieren lassen.
-6. Bilder und Parameter exportieren.
+## Editor workflow
 
-**maxChange ist eine Grenze, keine Intensität.** Für einen Rücken bestimmen amplitude und influence die gewünschte Wirkung. Die Wirkungsschwelle ist zielabhängig, kein universeller Qualitätsmaßstab.
+1. Save the scene and exit Play Mode.
+2. Open **Tools → Landscape Kernel → Live Preview** and assign a terrain.
+3. Set start/end positions in world X/Z, width, and transition distance. Keep the entire footprint inside the terrain.
+4. Select `ridge` for a raised or lowered form, or `corridor` for an endpoint-based connection.
+5. Set a camera position and target, or copy the Scene view camera.
+6. Generate a preview, compare views, and export images and parameters. Optional automatic refresh follows parameter changes.
 
-Das Fenster speichert keine Terrainänderung. `ridge` ist derzeit Vorschau-only. Dauerhafte Korridor-/Materialoperationen erfolgen über die dokumentierte Bridge. Keine Behauptung eines allgemeinen Preview-Commit-Workflows.
+Some Editor labels currently appear in German. **maxChange is a cap, not intensity.** Ridge amplitude and influence determine the requested effect. The effect threshold is task-specific, not a quality score.
 
-## Optional: Codex und CLI
-Den Ordner `skills/unity-landscape-kernel` in das persönliche Codex-Skillverzeichnis kopieren (üblicherweise `$CODEX_HOME/skills`, sonst `~/.codex/skills`). Bestehende Installation zuerst vergleichen; nicht blind überschreiben. Codex-Skills bei Bedarf neu laden. Den Request-Vertrag aus diesem Repository oder dem installierten UPM-Paket verwenden.
+The window does not save terrain changes. Ridge operations are preview-only through the window and JSON bridge. Persistent corridor and material operations use the bridge.
 
-Der Adapter benötigt zusätzlich eine installierte **Unity CLI mit dem Befehl `unity command ... script run`**, eine kompatible **Unity Pipeline** im geöffneten Projekt und `unity` im PATH. Diese externe Integration ist nicht im Bundle enthalten und für das Editorfenster nicht erforderlich. Die normale Unity-Editor-Executable allein ersetzt diese CLI nicht.
+## Optional Codex and CLI integration
+
+Copy `skills/unity-landscape-kernel` into your Codex skills directory, typically `$CODEX_HOME/skills` or `~/.codex/skills`. Compare existing files before replacing them and reload skill discovery if needed.
+
+The adapter requires a Unity CLI supporting `unity command ... script run`, a compatible Unity Pipeline connection in the open project, and `unity` on PATH. These external components are not bundled or required for the Editor window. The standard Unity Editor executable alone does not provide this interface.
 
 ```powershell
-& ./skills/unity-landscape-kernel/scripts/Invoke-Landscape.ps1 `
-  -ProjectPath 'E:/Projects/MyGame' `
-  -RequestPath 'E:/TerrainRequests/inspect.json' `
-  -OutputDirectory 'E:/TerrainReports'
+& ./skills/unity-landscape-kernel/scripts/Invoke-Landscape.ps1 -ProjectPath 'E:/Projects/MyGame' -RequestPath 'E:/Requests/inspect.json' -OutputDirectory 'E:/Reports'
 ```
 
-Zuerst `examples/inspect.json` kopieren und Platzhalter ersetzen. Die Antwort liefert echte Terrain-Komponenten-IDs. Danach `examples/preview.json` an Terrainmaß, Ursprung und Kamera anpassen. Die Beispielkoordinaten sind keine universell passenden Werte. Schreiboperationen benötigen den aktuellen Szenenhash. Nie parallele Editor-Schreiboperationen ausführen.
+Start with `examples/inspect.json`, replacing placeholders. Use the returned terrain component ID to adapt `examples/preview.json`. Adjust coordinates to the actual terrain. Mutations require the current scene hash. Run only one Editor write operation at a time.
 
-[Alle Felder und Operationen](Packages/com.ruinrelay.landscape-kernel/Documentation~/REQUEST.md).
+See the [request specification](Packages/com.ruinrelay.landscape-kernel/Documentation~/REQUEST.md).
 
-## Prüfung nach Installation
-Mit der optionalen Pipeline lässt sich der isolierte Test ausführen:
+## Verification
+
+With the optional Pipeline integration installed:
 
 ```powershell
 unity command --project-path 'E:/Projects/MyGame' script run --file ./scripts/SmokeTest.cs --entry TerrainBundleSmokeTest.Run --timeout 180 --format json
 ```
 
-Der Test verwendet ausschließlich temporäre eigene Terrainobjekte und räumt diese im finally-Block auf. Er speichert keine Szene. Die Repository-Struktur wird mit `python scripts/validate_bundle.py` geprüft.
+The test uses temporary terrain objects, cleans them up in a finally block, and saves no scene. Run `python scripts/validate_bundle.py` to check repository structure and request templates.
 
-## Grenzen
-- Einzelnes achsenparalleles, unskaliertes Unity Terrain; keine Mesh-Terrain-Deformation oder Spline-Wege.
-- Keine automatische Asset-Auflagekorrektur, Fahrzeugabnahme, Wasseranschlussprüfung oder Bewertung der Natürlichkeit.
-- Live-Aktualisierung reagiert auf Panelparameter; kein allgemeiner Beobachter aller Terrainbrushes.
-- Schutz-/Lochprüfungen sind abgetastet. Dünne Sonderfälle benötigen gesonderte Prüfung.
-- Vorschau kopiert TerrainData temporär; Speicherbedarf steigt mit Terraingröße. Animation/Wind wird zwischen Bildern nicht eingefroren.
-- Rücknahme prüft Hashes und überschreibt keine späteren fremden Änderungen. Absturz-/Stromausfall-Recovery erfolgt aus dem Backup, nicht als atomare Dateitransaktion.
+See [validation notes](docs/VALIDATION.md).
 
-[Prüfstand und Herkunft](docs/VALIDATION.md). Ein erfolgreicher Test beweist keine gestalterische Qualität.
+## Limitations
 
-## Nutzungsrechte
-Dieses Repository legt noch keine Open-Source-Lizenz fest. Eine öffentliche Ablage allein erteilt keine allgemeine Weiterverbreitungslizenz. Fremdassets sind nicht enthalten.
+- Single axis-aligned, unscaled Unity Terrain; no mesh deformation or spline paths.
+- No automatic asset ground-contact adjustment, vehicle or water-transition validation, or aesthetic scoring.
+- Live refresh follows panel parameters, not arbitrary terrain brushes.
+- Protected-area and hole checks are sampled; thin features need separate inspection.
+- Preview temporarily copies TerrainData; memory use scales with terrain size. Animation and wind are not frozen between images.
+- Rollback checks hashes to preserve subsequent changes. Crash recovery uses backups rather than an atomic filesystem transaction.
+
+Successful execution and measurable change do not constitute visual or gameplay approval.
+
+## Licensing
+
+No open-source license has been selected. Public availability alone does not grant general redistribution rights. Third-party art assets are not included.
