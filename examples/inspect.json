@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "operation": "inspect",
+  "operationId": "inspect_001",
+  "scenePath": "Assets/Scenes/YourScene.unity",
+  "evidenceDirectory": "<ABSOLUTE_REPORT_DIRECTORY>"
+}

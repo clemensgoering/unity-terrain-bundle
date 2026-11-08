@@ -1,0 +1,1 @@
+{"name":"RuinRelay.LandscapeKernel.Editor","rootNamespace":"RuinRelay.LandscapeKernel","references":["Unity.Newtonsoft.Json"],"includePlatforms":["Editor"],"autoReferenced":true}

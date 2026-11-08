@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "operation": "preview",
+  "operationId": "preview_001",
+  "scenePath": "Assets/Scenes/YourScene.unity",
+  "evidenceDirectory": "<ABSOLUTE_REPORT_DIRECTORY>",
+  "objectId": "<TERRAIN_COMPONENT_GLOBAL_OBJECT_ID_FROM_INSPECT>",
+  "planMode": "ridge",
+  "intent": "Compare a low ridge",
+  "start": [
+    30,
+    60
+  ],
+  "end": [
+    90,
+    60
+  ],
+  "halfWidth": 5,
+  "blend": 10,
+  "maxChange": 6,
+  "amplitude": 3,
+  "influence": 1,
+  "minimumUsefulChange": 0.25,
+  "preserveRects": [],
+  "cameras": [
+    {
+      "name": "overview",
+      "position": [
+        60,
+        40,
+        5
+      ],
+      "target": [
+        60,
+        10,
+        60
+      ]
+    }
+  ]
+}

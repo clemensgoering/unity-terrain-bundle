@@ -1,0 +1,5 @@
+#title { font-size: 19px; -unity-font-style: bold; margin-top: 8px; margin-bottom: 8px; }
+ScrollView { flex-grow: 1; padding-left: 12px; padding-right: 12px; }
+.row { flex-direction: row; flex-wrap: wrap; margin-top: 6px; margin-bottom: 6px; }
+.wrapped { white-space: normal; margin-top: 6px; margin-bottom: 6px; }
+#comparison { height: 450px; min-height: 250px; flex-shrink: 0; background-color: rgb(25, 31, 36); }

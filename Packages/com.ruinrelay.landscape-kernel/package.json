@@ -1,0 +1,2 @@
+{"name":"com.ruinrelay.landscape-kernel","version":"0.3.0-preview.1","displayName":"Landscape Kernel","description":"Editor operations for reference-preserving terrain edits and explicit evidence through a versioned JSON bridge.","unity":"6000.0","dependencies":{"com.unity.nuget.newtonsoft-json":"3.2.2"}}
+
